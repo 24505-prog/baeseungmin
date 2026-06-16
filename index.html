@@ -3,92 +3,126 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LUXE AI CLOSET - 프리미엄 패션 진단</title>
+  <title>LUXE AI CLOSET - 프리미엄 패션 컬러 진단</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
     :root {
-      --primary: #1a1a1a;
-      --accent: #d4af37; /* Gold */
-      --bg: #f8f9fa;
-      --card-bg: rgba(255, 255, 255, 0.9);
+      --primary-dark: #121212;
+      --card-dark: #1e1e1e;
+      --accent-gold: #d4af37;
+      --accent-gold-gradient: linear-gradient(135deg, #f3e5ab, #d4af37);
+      --text-light: #f5f5f5;
+      --text-muted: #8a8a8a;
+      --border-dark: #2a2a2a;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body {
       margin: 0; font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
-      background: var(--bg); color: var(--primary); line-height: 1.6;
+      background: var(--primary-dark); color: var(--text-light); line-height: 1.6;
     }
 
-    .container { width: min(1000px, 95%); margin: 40px auto; padding-bottom: 100px; }
+    .container { width: min(1100px, 95%); margin: 40px auto; padding-bottom: 100px; }
 
-    /* 고급스러운 헤더 */
-    header { text-align: center; margin-bottom: 50px; }
-    header h1 { font-size: 32px; letter-spacing: 4px; font-weight: 800; margin-bottom: 10px; }
-    header p { color: #888; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
+    /* 프리미엄 헤더 디자인 */
+    header { text-align: center; margin-bottom: 40px; }
+    header h1 { font-size: 34px; letter-spacing: 5px; font-weight: 800; margin-bottom: 8px; background: var(--accent-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    header p { color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 3px; }
 
-    /* 로그인 섹션 */
-    .glass-card {
-      background: var(--card-bg); border-radius: 30px; padding: 40px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.3);
-      backdrop-filter: blur(10px);
+    /* 인증 & 메인 베이스 카드 */
+    .premium-card {
+      background: var(--card-dark); border-radius: 24px; padding: 35px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.5); border: 1px solid var(--border-dark);
     }
+    
     .auth-box { max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
     input, select {
-      height: 55px; border-radius: 15px; border: 1px solid #eee; padding: 0 20px;
-      font-size: 16px; background: #fff; transition: 0.3s;
+      height: 52px; border-radius: 12px; border: 1px solid var(--border-dark); padding: 0 20px;
+      font-size: 15px; background: #252525; color: var(--text-light); transition: 0.3s;
     }
-    input:focus { border-color: var(--accent); outline: none; }
+    input:focus, select:focus { border-color: var(--accent-gold); outline: none; }
 
-    /* 메인 앱 레이아웃 */
-    .app-layout { display: grid; grid-template-columns: 1fr 350px; gap: 30px; }
-    @media (max-width: 900px) { .app-layout { grid-template-columns: 1fr; } }
+    /* 레이아웃 구조 */
+    .app-layout { display: grid; grid-template-columns: 1fr 380px; gap: 30px; }
+    @media (max-width: 950px) { .app-layout { grid-template-columns: 1fr; } }
 
-    /* 카테고리 탭 */
-    .category-container { margin-bottom: 30px; }
-    .category-tabs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px; }
+    /* 카테고리 탭 디자인 */
+    .category-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 20px; border-bottom: 1px solid var(--border-dark); }
     .tab-btn {
-      padding: 10px 20px; background: #fff; border: 1px solid #eee; border-radius: 50px;
-      white-space: nowrap; cursor: pointer; font-weight: 600; transition: 0.3s;
+      padding: 12px 22px; background: #252525; border: 1px solid var(--border-dark); border-radius: 50px;
+      white-space: nowrap; cursor: pointer; font-weight: 600; color: var(--text-muted); transition: 0.3s;
     }
-    .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .tab-btn.active { background: var(--accent-gold-gradient); color: #121212; border-color: transparent; font-weight: 700; }
 
-    /* 아이템 그리드 */
-    .item-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+    /* 옷 종류 그리드 */
+    .section-title { font-size: 15px; font-weight: bold; color: var(--accent-gold); margin-bottom: 12px; letter-spacing: 1px;}
+    .item-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 25px; }
     .fashion-item {
-      padding: 15px; background: #fff; border: 1px solid #eee; border-radius: 18px;
-      text-align: center; cursor: pointer; transition: 0.2s; font-size: 14px;
+      padding: 14px; background: #252525; border: 1px solid var(--border-dark); border-radius: 14px;
+      text-align: center; cursor: pointer; transition: 0.2s; font-size: 14px; color: #ddd;
     }
-    .fashion-item:hover { border-color: var(--accent); }
-    .fashion-item.selected { background: #fffbeb; border-color: var(--accent); color: var(--accent); font-weight: bold; }
+    .fashion-item:hover { border-color: #555; }
+    .fashion-item.active { border-color: var(--accent-gold); background: rgba(212,175,55,0.05); color: var(--accent-gold); font-weight: bold;}
 
-    /* 선택된 옷장 사이드바 */
-    .closet-sidebar { position: sticky; top: 20px; height: fit-content; }
-    .closet-title { font-weight: 800; font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-    .selected-list { list-style: none; padding: 0; margin-bottom: 25px; }
+    /* 20가지 색상 팔레트 존 */
+    .color-section { background: #1a1a1a; padding: 20px; border-radius: 16px; border: 1px solid var(--border-dark); display: none; animation: fadeIn 0.3s ease; }
+    .color-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); gap: 10px; }
+    .color-btn {
+      display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; 
+      padding: 8px; border-radius: 10px; transition: 0.2s; background: #222; border: 1px solid transparent;
+    }
+    .color-btn:hover { background: #2d2d2d; }
+    .color-circle { width: 24px; height: 24px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); }
+    .color-name { font-size: 11px; color: #bbb; text-align: center; }
+
+    /* 선택된 옷장 (우측 사이드바) */
+    .closet-sidebar { position: sticky; top: 20px; height: fit-content; display: flex; flex-direction: column; gap: 20px; }
+    .closet-title { font-weight: 800; font-size: 18px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border-dark); padding-bottom: 15px;}
+    .selected-list { display: flex; flex-wrap: wrap; gap: 8px; min-height: 80px; align-content: flex-start; }
     .selected-tag {
-      display: inline-flex; align-items: center; background: #eee; padding: 6px 12px;
-      border-radius: 8px; margin: 4px; font-size: 13px;
+      display: inline-flex; align-items: center; background: #2a2a2a; padding: 8px 14px; border-radius: 10px; 
+      font-size: 13px; border: 1px solid var(--border-dark); color: #eee;
     }
-    .selected-tag i { margin-left: 8px; cursor: pointer; color: #f44336; }
+    .selected-tag i { margin-left: 10px; cursor: pointer; color: #ff5252; transition: 0.15s; }
+    .selected-tag i:hover { color: #ff1744; }
 
-    /* 버튼 스타일 */
+    /* 상황 태그 리스트 */
+    .situation-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .sit-tag {
+      background: #252525; border: 1px solid var(--border-dark); padding: 6px 14px; border-radius: 30px;
+      font-size: 13px; cursor: pointer; color: #aaa; transition: 0.2s;
+    }
+    .sit-tag:hover, .sit-tag.active { border-color: var(--accent-gold); color: var(--accent-gold); background: rgba(212,175,55,0.05); }
+
+    /* 버튼 엔진 */
     .btn {
-      width: 100%; height: 60px; border-radius: 15px; border: none; font-size: 16px;
-      font-weight: bold; cursor: pointer; transition: 0.3s;
+      width: 100%; height: 55px; border-radius: 14px; border: none; font-size: 15px;
+      font-weight: bold; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px;
     }
-    .btn-gold { background: var(--accent); color: white; margin-top: 20px; }
-    .btn-dark { background: var(--primary); color: white; }
+    .btn-gold { background: var(--accent-gold-gradient); color: #121212; font-size: 16px; font-weight: 800; }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(214,175,55,0.2); }
+    .btn-gold:disabled { opacity: 0.5; transform: none; cursor: not-allowed; }
+    .btn-dark { background: #252525; color: var(--text-light); border: 1px solid var(--border-dark); }
+    .btn-dark:hover { background: #2d2d2d; }
     
-    /* 결과 박스 */
-    #resultBox { display: none; margin-top: 30px; animation: fadeInUp 0.5s ease; }
-    .result-card { background: #fff; border-left: 5px solid var(--accent); padding: 25px; border-radius: 20px; }
-    .tts-btn {
-      display: inline-flex; align-items: center; gap: 10px; padding: 12px 24px;
-      background: #f0f0f0; border-radius: 12px; margin-top: 15px; cursor: pointer; font-weight: 600;
+    /* 고급스러운 진단 결과 창 */
+    #resultBox { display: none; margin-top: 30px; animation: fadeInUp 0.4s ease; }
+    .result-card { background: #1a1a1a; border: 1px solid var(--accent-gold); padding: 30px; border-radius: 20px; }
+    .result-header { font-size: 18px; font-weight: bold; color: var(--accent-gold); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+    .result-content { font-size: 15px; color: #ddd; line-height: 1.8; white-space: pre-wrap; background: #222; padding: 20px; border-radius: 12px; border: 1px solid #2a2a2a; }
+    
+    /* 원형 스피커 모양의 프리미엄 음성 재생 레이아웃 */
+    .tts-zone { display: flex; justify-content: center; margin-top: 25px; }
+    .tts-lux-btn {
+      display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer;
+      padding: 15px 30px; border-radius: 50px; background: var(--accent-gold-gradient); color: #121212;
+      font-weight: 800; font-size: 14px; letter-spacing: 1px; transition: 0.3s; box-shadow: 0 10px 25px rgba(214,175,55,0.15);
     }
-    .tts-btn:hover { background: #e0e0e0; }
+    .tts-lux-btn:hover { transform: scale(1.03); box-shadow: 0 12px 30px rgba(214,175,55,0.3); }
+    .tts-lux-btn i { font-size: 20px; }
 
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     .hidden { display: none; }
   </style>
 </head>
@@ -97,65 +131,85 @@
   <div class="container">
     <header>
       <h1>LUXE CLOSET</h1>
-      <p>AI Premium Fashion Analysis</p>
+      <p>AI Premium Style & Color Critic</p>
     </header>
 
-    <section id="authSection" class="glass-card">
+    <section id="authSection" class="premium-card">
       <div class="auth-box">
-        <h2 style="text-align:center; margin-bottom:20px;">Welcome</h2>
-        <input id="emailInput" type="email" placeholder="Email Address" />
-        <input id="passwordInput" type="password" placeholder="Password" />
-        <button class="btn btn-dark" id="loginBtn">LOG IN</button>
-        <button class="btn" id="signupBtn" style="color: #666;">SIGN UP</button>
+        <h3 style="text-align:center; margin-bottom:15px; letter-spacing: 2px;">PREMIUM AUTHENTICATION</h3>
+        <input id="emailInput" type="email" placeholder="이메일 주소 (Email)" />
+        <input id="passwordInput" type="password" placeholder="비밀번호 (Password)" />
+        <button class="btn btn-gold" id="loginBtn">LOG IN</button>
+        <button class="btn btn-dark" id="signupBtn">SIGN UP</button>
       </div>
     </section>
 
     <section id="mainSection" class="hidden">
       <div class="app-layout">
-        <div class="glass-card">
-          <div class="category-container">
-            <div class="category-tabs" id="categoryTabs">
-              <button class="tab-btn active" data-cat="상의">상의</button>
-              <button class="tab-btn" data-cat="하의">하의</button>
-              <button class="tab-btn" data-cat="아우터">아우터</button>
-              <button class="tab-btn" data-cat="신발">신발</button>
-              <button class="tab-btn" data-cat="모자">모자</button>
-              <button class="tab-btn" data-cat="액세서리">액세서리</button>
-            </div>
-            <div class="item-grid" id="itemGrid">
-              </div>
+        
+        <div class="premium-card">
+          <div class="category-tabs" id="categoryTabs">
+            <button class="tab-btn active" data-cat="상의">상의</button>
+            <button class="tab-btn" data-cat="하의">하의</button>
+            <button class="tab-btn" data-cat="아우터">아우터</button>
+            <button class="tab-btn" data-cat="신발">신발</button>
+            <button class="tab-btn" data-cat="모자">모자</button>
+            <button class="tab-btn" data-cat="액세서리">액세서리</button>
+          </div>
+
+          <div class="section-title">1단계: 의류 카테고리 선택</div>
+          <div class="item-grid" id="itemGrid"></div>
+          
+          <div class="color-section" id="colorSection">
+            <div class="section-title">2단계: 디테일 컬러 매칭 (<span id="targetItemName" style="color:#fff;"></span>)</div>
+            <div class="color-grid" id="colorGrid"></div>
           </div>
           
-          <div style="margin-top: 40px;">
-            <label style="font-weight: 800; display: block; margin-bottom: 10px;">어떤 상황에 입으시나요?</label>
-            <input id="situationInput" type="text" placeholder="예: 한강 데이트, 소개팅, 격식 있는 결혼식" style="width: 100%;" />
+          <div style="margin-top: 35px;">
+            <div class="section-title">3단계: 목적지 및 TPO 설정</div>
+            <input id="situationInput" type="text" placeholder="직접 입력하거나 아래 추천 태그를 터치하세요." style="width: 100%;" />
+            <div class="situation-tags" id="sitTags">
+              <span class="sit-tag">첫 소개팅 자리</span>
+              <span class="sit-tag">호텔 하객 명단</span>
+              <span class="sit-tag">대학 캠퍼스 룩</span>
+              <span class="sit-tag">주말 한강 데이트</span>
+              <span class="sit-tag">중요한 대면 면접</span>
+            </div>
           </div>
         </div>
 
-        <div class="closet-sidebar glass-card">
-          <div class="closet-title"><i class="fas fa-tshirt"></i> My Closet</div>
+        <div class="closet-sidebar premium-card">
+          <div class="closet-title"><i class="fas fa-gem" style="color:var(--accent-gold);"></i> MY VIRTUAL CLOSET</div>
+          
           <div id="selectedContainer" class="selected-list">
-            <p style="color: #999; font-size: 14px;">아이템을 선택해주세요.</p>
+            <p style="color: var(--text-muted); font-size: 13px;">의류 종류를 누른 뒤 <br>색상을 매칭하면 옷장에 보관됩니다.</p>
           </div>
           
-          <select id="voiceSelect" style="width: 100%; margin-bottom: 10px;">
-            <option value="nova">Nova (세련된 여성)</option>
-            <option value="alloy">Alloy (깔끔한 중성)</option>
-            <option value="onyx">Onyx (차분한 남성)</option>
-          </select>
+          <div style="margin-top:15px;">
+            <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:6px;">AI 보이스 톤앤매너</label>
+            <select id="voiceSelect" style="width: 100%;">
+              <option value="nova">Nova (차분하고 우아한 스타일리스트)</option>
+              <option value="alloy">Alloy (명쾌하고 정교한 트렌드 세터)</option>
+              <option value="onyx">Onyx (깊고 매력적인 옴므 디자이너)</option>
+              <option value="shimmer">Shimmer (감각적이고 에너제틱한 비평가)</option>
+            </select>
+          </div>
           
-          <button class="btn btn-gold" id="evaluateBtn">진단 시작하기</button>
-          <button class="btn" id="logoutBtn" style="margin-top: 10px; font-size: 13px; color:#888;">로그아웃</button>
+          <button class="btn btn-gold" id="evaluateBtn"><i class="fas fa-wand-magic-sparkles"></i> AI 스타일 진단</button>
+          <button class="btn btn-dark" id="logoutBtn" style="font-size: 12px; height:42px; margin-top:15px; color:var(--text-muted);">로그아웃</button>
         </div>
       </div>
 
       <div id="resultBox">
         <div class="result-card">
-          <h3 style="margin-top:0;"><i class="fas fa-magic" style="color:var(--accent);"></i> 스타일리스트 AI 진단 결과</h3>
-          <div id="resultContent" style="font-size: 16px; color:#444;"></div>
+          <div class="result-header"><i class="fas fa-quote-left"></i> LUXE AI STYLE REPORT</div>
+          <div id="resultContent" class="result-content"></div>
           
-          <div id="ttsPlayBtn" class="tts-btn">
-            <i class="fas fa-volume-up"></i> 평가 음성 듣기
+          <div class="tts-zone">
+            <div id="ttsPlayBtn" class="tts-lux-btn">
+              <i class="fas fa-volume-high"></i>
+              <span>평가 음성 듣기 (PLAY TTS)</span>
+            </div>
           </div>
           <audio id="audioPlayer" class="hidden"></audio>
         </div>
@@ -166,10 +220,12 @@
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-    import { getDatabase, ref, push, set, onValue } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+    import { getDatabase, ref, push, set } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 
-    // 1. 설정 정보 (본인 것으로 수정)
+    // [필독] 본인의 구글 웹앱 URL 주소로 변경하세요!
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbznWJkBxB_S2t__XRfQTOXxJTrRBDZVWooAdyO6NPp02pXzDqV8mEdvWe1eDOnh2_IAIQ/exec';
+    
+    // 파이어베이스 주입 데이터 완료
     const firebaseConfig = {
       apiKey: "AIzaSyBVeHOtbK6HgclpIx3a3GwfFfoBnAUJn_g",
       authDomain: "baeseung-ccd19.firebaseapp.com",
@@ -183,39 +239,94 @@
     const auth = getAuth(app);
     const database = getDatabase(app);
 
-    // 2. 패션 데이터 (카테고리당 20개)
+    // 2. 프리미엄 카테고리 데이터셋 (각 20개 총 120개)
     const fashionData = {
-      "상의": ["반팔 티셔츠", "긴팔 티셔츠", "셔츠", "블라우스", "니트", "맨투맨", "후드티", "피케 셔츠", "민소매", "터틀넥", "스트라이프 티", "체크 셔츠", "옥스포드 셔츠", "데님 셔츠", "린넨 셔츠", "V넥 니트", "가디건", "크롭탑", "오버핏 티셔츠", "헨리넥 티"],
-      "하의": ["청바지", "슬랙스", "면바지", "반바지", "조거 팬츠", "와이드 팬츠", "카고 팬츠", "린넨 바지", "스커트", "롱 스커트", "미니 스커트", "데님 스커트", "치노 팬츠", "레깅스", "트레이닝 바지", "부츠컷 팬츠", "스트레이트 진", "생지 데님", "코듀로이 바지", "테이퍼드 팬츠"],
-      "아우터": ["코트", "패딩", "자켓", "블레이저", "가죽 자켓", "청자켓", "항공 점퍼", "트렌치 코트", "바람막이", "후드 집업", "무스탕", "가디건(아우터)", "야상", "뽀글이 플리스", "더플 코트", "집업 니트", "MA-1", "슈트 상의", "베스트(조끼)", "경량 패딩"],
-      "신발": ["운동화", "스니커즈", "구두", "로퍼", "부츠", "샌들", "슬리퍼", "워커", "첼시 부츠", "단화", "러닝화", "어글리 슈즈", "캔버스화", "옥스퍼드화", "더비 슈즈", "뮬", "하이힐", "플랫 슈즈", "레인 부츠", "슬립온"],
-      "모자": ["볼캡", "비니", "버킷햇", "페도라", "베레모", "헌팅캡", "캡모자", "비치햇", "보닛", "스냅백", "캠프캡", "뉴스보이캡", "벙거지 모자", "털모자", "썬캡", "밀짚모자", "니트 비니", "와치캡", "보울러", "파나마 햇"],
-      "액세서리": ["목걸이", "팔찌", "반지", "귀걸이", "시계", "벨트", "넥타이", "스카프", "머플러", "장갑", "안경", "선글라스", "크로스백", "백팩", "토트백", "숄더백", "클러치", "에코백", "양말", "브로치"]
+      "상의": ["반팔 티셔츠", "긴팔 티셔츠", "셔츠", "블라우스", "니트 세터", "맨투맨", "후드티", "카라티", "민소매 슬리브리스", "터틀넥", "스트라이프티", "체크 셔츠", "오버핏 티셔츠", "옥스포드 셔츠", "린넨 셔츠", "V넥 크루", "니트 조끼", "크롭탑", "카디건", "실크 나시"],
+      "하의": ["청바지", "드레스 슬랙스", "치노 면바지", "버뮤다 반바지", "조거 팬츠", "와이드 데님", "카고 팬츠", "린넨 바지", "롱 스커트", "미니 스커트", "테이퍼드 진", "부츠컷 팬츠", "H라인 스커트", "트레이닝 바지", "가죽 바지", "생지 흑청", "코듀로이 바지", "플리츠 스커트", "밴딩 팬츠", "정장 바지"],
+      "아우터": ["롱 코트", "헤비 패딩", "테일러드 자켓", "트위드 자켓", "가죽 라이더 자켓", "청자켓", "항공 점퍼", "트렌치 코트", "윈드브레이커", "후드 집업", "무스탕", "블레이저", "필드 야상", "플리스 점퍼", "더플 떡볶이코트", "숏 패딩", "블루종 자켓", "경량 패딩 조끼", "바시티 자켓", "가디건 아우터"],
+      "신발": ["미니멀 스니커즈", "러닝 캔버스화", "더비 슈즈", "클래식 로퍼", "가죽 워커", "스트랩 샌들", "슬리퍼", "첼시 가죽부츠", "어글리 슈즈", "옥스퍼드 구두", "스틸레토 힐", "플랫 플랫슈즈", "레인 부츠", "슬립온", "독일군 스니커즈", "블로퍼", "웨스턴 부츠", "스웨이드 로퍼", "스포츠 운동화", "뮬"],
+      "모자": ["미니멀 볼캡", "스트릿 비니", "코튼 버킷햇", "클래식 페도라", "프렌치 베레모", "뉴스보이 헌팅캡", "스냅백", "보트 가든햇", "캠프캡", "니트 버킷햇", "와치캡", "썬캡 바이저", "밀짚 보터햇", "귀도리 방한모", "탈착식 사파리햇", "헬멧 이너캡", "트러커캡", "파일럿햇", "바라클라바", "보울러"],
+      "액세서리": ["실버 체인목걸이", "가죽 커프팔찌", "레이어드 반지", "드롭 귀걸이", "메탈 크로노시계", "레더 벨트", "실크 실크넥타이", "쁘띠 미니코튼스카프", "울 머플러", "가죽 장갑", "하프프레임 안경", "스퀘어 선글라스", "레더 크로스백", "유틸리티 백팩", "프리미엄 토트백", "체인 숄더백", "클러치 파우치", "캔버스 에코백", "캐주얼 양말", "황동 뱃지브로치"]
     };
 
-    let selectedItems = [];
+    // 20가지 컬러 데이터 팔레트 구성 (Hex 및 컬러 네임 칭)
+    const colorPalette = [
+      { name: "블랙", hex: "#111111" }, { name: "화이트", hex: "#ffffff" },
+      { name: "차콜", hex: "#444444" }, { name: "그레이", hex: "#888888" },
+      { name: "네이비", hex: "#0f1e36" }, { name: "블루", hex: "#2196f3" },
+      { name: "스카이블루", hex: "#a7d7f9" }, { name: "베이지", hex: "#f5f5dc" },
+      { name: "아이보리", hex: "#fffff0" }, { name: "브라운", hex: "#5d4037" },
+      { name: "카키", hex: "#4b5320" }, { name: "올리브", hex: "#808000" },
+      { name: "와인", hex: "#722f37" }, { name: "레드", hex: "#f44336" },
+      { name: "핑크", hex: "#ffc0cb" }, { name: "오렌지", hex: "#ff9800" },
+      { name: "옐로우", hex: "#ffeb3b" }, { name: "그린", hex: "#4caf50" },
+      { name: "퍼플", hex: "#9c27b0" }, { name: "카멜", hex: "#c19a6b" }
+    ];
 
-    // 3. UI 렌더링 로직
+    let selectedItems = []; // 최종 보관된 셋템 리스트
+    let currentPendingItem = ""; // 컬러를 입히기 위해 현재 대기중인 아이템 명칭
+
+    // 3. 엔진 가동 및 렌더러
     function renderItems(category) {
       const grid = document.getElementById('itemGrid');
       grid.innerHTML = '';
       fashionData[category].forEach(item => {
         const div = document.createElement('div');
-        div.className = `fashion-item ${selectedItems.includes(item) ? 'selected' : ''}`;
+        div.className = `fashion-item ${currentPendingItem === item ? 'active' : ''}`;
         div.textContent = item;
-        div.onclick = () => toggleItem(item);
+        div.onclick = () => selectItemStep1(item);
         grid.appendChild(div);
       });
     }
 
-    function toggleItem(item) {
-      if (selectedItems.includes(item)) {
-        selectedItems = selectedItems.filter(i => i !== item);
-      } else {
-        if (selectedItems.length >= 8) return alert("최대 8개까지만 선택 가능합니다.");
-        selectedItems.push(item);
+    // 1단계: 옷 종류 터치 -> 색상 팔레트 개방
+    function selectItemStep1(item) {
+      currentPendingItem = item;
+      document.getElementById('targetItemName').textContent = item;
+      document.getElementById('colorSection').style.display = 'block';
+      
+      const activeCat = document.querySelector('.tab-btn.active').dataset.cat;
+      renderItems(activeCat); // Active 효과 반영 리렌더링
+      renderColors();
+    }
+
+    // 2단계: 색상 배치 팔레트 로드
+    function renderColors() {
+      const colorGrid = document.getElementById('colorGrid');
+      colorGrid.innerHTML = '';
+      colorPalette.forEach(color => {
+        const div = document.createElement('div');
+        div.className = 'color-btn';
+        div.innerHTML = `
+          <div class="color-circle" style="background-color: ${color.hex}"></div>
+          <div class="color-name">${color.name}</div>
+        `;
+        div.onclick = () => selectColorStep2(color.name);
+        colorGrid.appendChild(div);
+      });
+    }
+
+    // 3단계: 색상 결정 -> 최종 버츄얼 장바구니 수납
+    function selectColorStep2(colorName) {
+      if(!currentPendingItem) return;
+      const combinedItem = `[${colorName}] ${currentPendingItem}`;
+      
+      // 중복 체크 및 맥시멈 제한 가이드
+      if(selectedItems.includes(combinedItem)) {
+        alert("이미 같은 컬러의 아이템이 옷장에 보관되어 있습니다.");
+        return;
       }
+      if(selectedItems.length >= 8) {
+        alert("프리미엄 정밀 진단은 한 번에 최대 8개 아이템까지만 지원합니다.");
+        return;
+      }
+
+      selectedItems.push(combinedItem);
       updateClosetUI();
+      
+      // 초기화 후 닫기
+      currentPendingItem = "";
+      document.getElementById('colorSection').style.display = 'none';
       const activeCat = document.querySelector('.tab-btn.active').dataset.cat;
       renderItems(activeCat);
     }
@@ -223,7 +334,7 @@
     function updateClosetUI() {
       const container = document.getElementById('selectedContainer');
       if (selectedItems.length === 0) {
-        container.innerHTML = '<p style="color: #999; font-size: 14px;">아이템을 선택해주세요.</p>';
+        container.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">의류 종류를 누른 뒤 <br>색상을 매칭하면 옷장에 보관됩니다.</p>';
         return;
       }
       container.innerHTML = selectedItems.map(item => `
@@ -234,11 +345,9 @@
     window.removeTag = (item) => {
       selectedItems = selectedItems.filter(i => i !== item);
       updateClosetUI();
-      const activeCat = document.querySelector('.tab-btn.active').dataset.cat;
-      renderItems(activeCat);
     };
 
-    // 탭 클릭 이벤트
+    // 상단 탭 대전환 컨트롤러
     document.getElementById('categoryTabs').onclick = (e) => {
       if (!e.target.classList.contains('tab-btn')) return;
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -246,18 +355,29 @@
       renderItems(e.target.dataset.cat);
     };
 
-    // 4. 기능 로직 (진단 및 TTS)
+    // 상황 숏컷 태그 바인딩 터치 이벤트
+    document.getElementById('sitTags').onclick = (e) => {
+      if(!e.target.classList.contains('sit-tag')) return;
+      document.querySelectorAll('.sit-tag').forEach(t => t.classList.remove('active'));
+      e.target.classList.add('active');
+      document.getElementById('situationInput').value = e.target.textContent;
+    };
+
+    // 4. 비즈니스 AI 컴파일 통신 모듈
     const evaluateBtn = document.getElementById('evaluateBtn');
     const ttsPlayBtn = document.getElementById('ttsPlayBtn');
     const audioPlayer = document.getElementById('audioPlayer');
     let currentAudioBase64 = "";
 
     evaluateBtn.onclick = async () => {
-      const situation = document.getElementById('situationInput').value;
-      if (selectedItems.length === 0 || !situation) return alert("옷을 선택하고 상황을 입력하세요!");
+      const situation = document.getElementById('situationInput').value.trim();
+      if (selectedItems.length === 0 || !situation) {
+        alert("스타일링할 의류 색상 세트와 TPO 상황 목적을 명확히 정의하세요!");
+        return;
+      }
 
       evaluateBtn.disabled = true;
-      evaluateBtn.textContent = "AI 분석 중...";
+      evaluateBtn.textContent = "AI 럭셔리 스타일링 리포트 빌드 중...";
       document.getElementById('resultBox').style.display = 'none';
 
       try {
@@ -271,12 +391,17 @@
           })
         });
         const data = await res.json();
+        if(data.error) throw new Error(data.error);
         
+        // 텍스트 먼저 렌더링 후 음성 대기 상태 지정
         document.getElementById('resultContent').innerText = data.evaluation;
         currentAudioBase64 = data.audioBase64;
         document.getElementById('resultBox').style.display = 'block';
         
-        // Firebase 저장
+        // 부드러운 스크롤 이동 연출
+        window.scrollTo({ top: document.getElementById('resultBox').offsetTop - 20, behavior: 'smooth' });
+
+        // 파이어베이스에 히스토리 기록 업로드
         const uid = auth.currentUser.uid;
         push(ref(database, `users/${uid}/history`), {
           clothes: selectedItems.join(", "),
@@ -285,22 +410,26 @@
           date: new Date().toLocaleString()
         });
 
-      } catch (e) { alert("오류 발생!"); }
-      finally {
+      } catch (e) { 
+        alert("분석 요청 실패: 설정 상태 또는 GAS 연결을 확인해 주세요."); 
+      } finally {
         evaluateBtn.disabled = false;
-        evaluateBtn.textContent = "진단 시작하기";
+        evaluateBtn.textContent = "AI 스타일 진단";
       }
     };
 
-    // 음성 듣기 버튼 클릭 시
+    // [TTS 수동 제어 부품] 오디오 소스 트리거링 엔진
     ttsPlayBtn.onclick = () => {
-      if (!currentAudioBase64) return;
+      if (!currentAudioBase64) {
+        alert("재생할 음성 데이터가 컴파일되지 않았습니다.");
+        return;
+      }
       const audioUrl = `data:audio/mp3;base64,${currentAudioBase64}`;
       audioPlayer.src = audioUrl;
-      audioPlayer.play();
+      audioPlayer.play().catch(e => alert("오디오 디코딩 실패 또는 브라우저 정책 차단"));
     };
 
-    // 5. 인증 로직
+    // 5. 파이어베이스 자격 증명 생명 주기 파트
     onAuthStateChanged(auth, (user) => {
       if (user) {
         document.getElementById('authSection').classList.add('hidden');
@@ -313,13 +442,20 @@
     });
 
     document.getElementById('loginBtn').onclick = () => {
-      signInWithEmailAndPassword(auth, document.getElementById('emailInput').value, document.getElementById('passwordInput').value);
+      const email = document.getElementById('emailInput').value.trim();
+      const pass = document.getElementById('passwordInput').value.trim();
+      if(!email || !pass) return alert('자격을 채워주세요.');
+      signInWithEmailAndPassword(auth, email, pass).catch(e => alert("인증 실패: " + e.message));
     };
+    
     document.getElementById('signupBtn').onclick = () => {
-      createUserWithEmailAndPassword(auth, document.getElementById('emailInput').value, document.getElementById('passwordInput').value);
+      const email = document.getElementById('emailInput').value.trim();
+      const pass = document.getElementById('passwordInput').value.trim();
+      if(!email || !pass) return alert('자격을 채워주세요.');
+      createUserWithEmailAndPassword(auth, email, pass).then(() => alert("회원가입 완료!")).catch(e => alert("생성 실패: " + e.message));
     };
+    
     document.getElementById('logoutBtn').onclick = () => signOut(auth);
-
   </script>
 </body>
 </html>
