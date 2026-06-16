@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 패션 코디 평가 앱</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #e3f2fd, #fce4ec);
+      font-family: Arial, sans-serif;
+      color: #333;
+    }
+    .container {
+      width: min(700px, 92%);
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.16);
+    }
+    h1 { text-align: center; font-size: 26px; margin-bottom: 8px; }
+    .subtitle { text-align: center; color: #777; margin-bottom: 24px; font-size: 14px; }
+    
+    .auth-box { max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    input, select, textarea {
+      width: 100%; height: 46px; padding: 0 14px; border: 1px solid #ddd;
+      border-radius: 12px; font-size: 15px; outline: none; transition: 0.2s;
+    }
+    textarea { min-height: 80px; padding: 12px; resize: vertical; font-family: inherit; }
+    input:focus, select:focus, textarea:focus {
+      border-color: #42a5f5; box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.15);
+    }
+    
+    button {
+      border: none; border-radius: 12px; height: 46px; font-size: 15px;
+      cursor: pointer; transition: 0.15s; font-weight: bold;
+    }
+    button:hover { transform: translateY(-2px); opacity: 0.9; }
+    button:disabled { cursor: not-allowed; opacity: 0.6; transform: none; }
+    
+    .primary-btn { background: #42a5f5; color: white; }
+    .secondary-btn { background: #7e57c2; color: white; }
+    .logout-btn { background: #455a64; color: white; padding: 0 16px; }
+    .delete-btn { background: #ef5350; color: white; padding: 4px 8px; height: auto; font-size: 12px; border-radius: 6px;}
+
+    .top-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 22px; padding: 14px; border-radius: 16px; background: #f7f9fb;
+    }
+    .main-form { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+    .status { min-height: 20px; color: #666; font-size: 14px; margin-top: 8px; text-align: center; }
+    
+    .result-box { display: none; background: #f1f8e9; border: 1px solid #c5e1a5; padding: 18px; border-radius: 16px; margin-top: 16px; }
+    .result-title { font-weight: bold; color: #33691e; margin-bottom: 8px; }
+    .result-content { line-height: 1.6; white-space: pre-wrap; margin-bottom: 12px; }
+    audio { width: 100%; }
+
+    .history-section { margin-top: 30px; border-top: 1px dashed #ddd; padding-top: 20px; }
+    .history-title { font-size: 18px; font-weight: bold; margin-bottom: 12px; }
+    .history-list { display: flex; flex-direction: column; gap: 10px; }
+    .history-item {
+      background: #f7f9fb; border: 1px solid #edf1f5; padding: 14px; border-radius: 12px;
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .history-info { font-size: 14px; line-height: 1.5; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>AI 패션 코디 평가기 🧥</h1>
+    <div class="subtitle">내가 고른 옷을 AI가 상황에 맞게 평가하고 음성으로 들려줍니다.</div>
+
+    <section id="authSection">
+      <div class="auth-box">
+        <input id="emailInput" type="email" placeholder="이메일 주소" />
+        <input id="passwordInput" type="password" placeholder="비밀번호 (6자리 이상)" />
+        <button class="primary-btn" id="loginBtn">로그인</button>
+        <button class="secondary-btn" id="signupBtn">회원가입</button>
+      </div>
+    </section>
+
+    <section id="mainSection" class="hidden">
+      <div class="top-bar">
+        <div style="font-size: 14px;">님 환영합니다! ✨ <br><strong id="userEmail"></strong></div>
+        <button class="logout-btn" id="logoutBtn">로그아웃</button>
+      </div>
+
+      <div class="main-form">
+        <div>
+          <label style="font-weight:bold; display:block; margin-bottom:6px;">오늘 입은 (또는 고른) 옷</label>
+          <input id="clothesInput" type="text" placeholder="예: 검은색 오버핏 후드티, 와이드 청바지, 흰색 운동화" />
+        </div>
+        <div>
+          <label style="font-weight:bold; display:block; margin-bottom:6px;">가려는 상황 / 장소</label>
+          <input id="situationInput" type="text" placeholder="예: 대학 대면 강의실, 첫 소개팅, 격식 있는 결혼식 하객" />
+        </div>
+        <div>
+          <label style="font-weight:bold; display:block; margin-bottom:6px;">AI 목소리 선택</label>
+          <select id="voiceSelect">
+            <option value="nova">Nova (부드러운 여성음)</option>
+            <option value="alloy">Alloy (중성적이고 깔끔함)</option>
+            <option value="onyx">Onyx (차분하고 멋진 남성음)</option>
+            <option value="shimmer">Shimmer (화사한 여성음)</option>
+          </select>
+        </div>
+        <button class="primary-btn" id="evaluateBtn">스타일 평가받기 (TTS 재생)</button>
+      </div>
+
+      <div id="status" class="status"></div>
+
+      <div id="resultBox" class="result-box">
+        <div class="result-title">💡 스타일리스트 AI의 패션 평가</div>
+        <div id="resultContent" class="result-content"></div>
+        <audio id="audioPlayer" controls autoplay></audio>
+      </div>
+
+      <div class="history-section">
+        <div class="history-title">📜 나의 이전 코디 기록</div>
+        <div id="historyList" class="history-list"></div>
+      </div>
+    </section>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import { getDatabase, ref, push, set, remove, onValue, off } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+    // [중요] 본인의 구글 앱스 스크립트 웹 앱 URL을 아래에 꼭 붙여넣으세요!
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbznWJkBxB_S2t__XRfQTOXxJTrRBDZVWooAdyO6NPp02pXzDqV8mEdvWe1eDOnh2_IAIQ/exec';
+
+    // 제출해주신 Firebase 구성 정보 적용 완료
+    const firebaseConfig = {
+      apiKey: "AIzaSyBVeHOtbK6HgclpIx3a3GwfFfoBnAUJn_g",
+      authDomain: "baeseung-ccd19.firebaseapp.com",
+      databaseURL: "https://baeseung-ccd19-default-rtdb.firebaseio.com",
+      projectId: "baeseung-ccd19",
+      storageBucket: "baeseung-ccd19.firebasestorage.app",
+      messagingSenderId: "660051676205",
+      appId: "1:660051676205:web:8ca691620cb44c5d6fbca4",
+      measurementId: "G-FQZBVH3400"
+    };
+
+    // Firebase 초기화
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    // DOM 요소
+    const authSection = document.getElementById('authSection');
+    const mainSection = document.getElementById('mainSection');
+    const emailInput = document.getElementById('emailInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const loginBtn = document.getElementById('loginBtn');
+    const signupBtn = document.getElementById('signupBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userEmail = document.getElementById('userEmail');
+    
+    const clothesInput = document.getElementById('clothesInput');
+    const situationInput = document.getElementById('situationInput');
+    const voiceSelect = document.getElementById('voiceSelect');
+    const evaluateBtn = document.getElementById('evaluateBtn');
+    const statusBox = document.getElementById('status');
+    const resultBox = document.getElementById('resultBox');
+    const resultContent = document.getElementById('resultContent');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const historyList = document.getElementById('historyList');
+
+    let currentUser = null;
+    let dbRef = null;
+
+    // 회원가입
+    signupBtn.addEventListener('click', async () => {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+      if(!email || !password) return alert('이메일과 비밀번호를 입력해주세요.');
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        alert('회원가입이 완료되었습니다!');
+      } catch (e) { alert('회원가입 실패: ' + e.message); }
+    });
+
+    // 로그인
+    loginBtn.addEventListener('click', async () => {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+      if(!email || !password) return alert('이메일과 비밀번호를 입력해주세요.');
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (e) { alert('로그인 실패: ' + e.message); }
+    });
+
+    // 로그아웃
+    logoutBtn.addEventListener('click', () => signOut(auth));
+
+    // 인증 상태 감지
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+        authSection.classList.add('hidden');
+        mainSection.classList.remove('hidden');
+        userEmail.textContent = user.email;
+        emailInput.value = ''; passwordInput.value = '';
+        startDataSync(user.uid);
+      } else {
+        currentUser = null;
+        authSection.classList.remove('hidden');
+        mainSection.classList.add('hidden');
+        if(dbRef) off(dbRef);
+        historyList.innerHTML = '';
+        resultBox.style.display = 'none';
+      }
+    });
+
+    // AI 평가 및 TTS 요청
+    evaluateBtn.addEventListener('click', async () => {
+      const clothes = clothesInput.value.trim();
+      const situation = situationInput.value.trim();
+      const voice = voiceSelect.value;
+
+      if(!clothes || !situation) {
+        alert('옷과 상황 정보를 모두 입력해 주세요!');
+        return;
+      }
+
+      try {
+        evaluateBtn.disabled = true;
+        evaluateBtn.textContent = 'AI 스타일리스트가 분석 중...';
+        statusBox.textContent = '구글 서버를 경유해 AI 피드백을 받아오고 있습니다.';
+        resultBox.style.display = 'none';
+
+        const response = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({
+            action: 'evaluate',
+            clothes: clothes,
+            situation: situation,
+            voice: voice
+          })
+        });
+
+        const data = await response.json();
+        if(data.error) throw new Error(data.error);
+
+        resultContent.textContent = data.evaluation;
+        
+        const audioUrl = base64ToAudioUrl(data.audioBase64, 'audio/mpeg');
+        audioPlayer.src = audioUrl;
+        resultBox.style.display = 'block';
+        statusBox.textContent = '분석이 완료되어 오디오가 재생됩니다!';
+
+        saveToFirebase(clothes, situation, data.evaluation);
+
+        clothesInput.value = '';
+        situationInput.value = '';
+
+      } catch (err) {
+        console.error(err);
+        statusBox.textContent = '평가 요청 실패';
+        alert('에러 발생: ' + err.message);
+      } finally {
+        evaluateBtn.disabled = false;
+        evaluateBtn.textContent = '스타일 평가받기 (TTS 재생)';
+      }
+    });
+
+    function base64ToAudioUrl(base64, mimeType) {
+      const byteCharacters = atob(base64);
+      const byteArrays = [];
+      for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+        const slice = byteCharacters.slice(offset, offset + 512);
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+        byteArrays.push(new Uint8Array(byteNumbers));
+      }
+      const blob = new Blob(byteArrays, { type: mimeType });
+      return URL.createObjectURL(blob);
+    }
+
+    async function saveToFirebase(clothes, situation, evaluation) {
+      if(!currentUser) return;
+      try {
+        const userItemsRef = ref(database, `users/${currentUser.uid}/history`);
+        const newItemRef = push(userItemsRef);
+        await set(newItemRef, {
+          clothes,
+          situation,
+          evaluation,
+          date: new Date().toLocaleString('ko-KR')
+        });
+      } catch(e) { console.error('Firebase 저장 실패:', e); }
+    }
+
+    function startDataSync(uid) {
+      dbRef = ref(database, `users/${uid}/history`);
+      onValue(dbRef, (snapshot) => {
+        const data = snapshot.val();
+        renderHistory(data);
+      });
+    }
+
+    function renderHistory(data) {
+      historyList.innerHTML = '';
+      if(!data) {
+        historyList.innerHTML = '<div style="color:#888; text-align:center; padding:10px;">저장된 스타일 평가 기록이 없습니다.</div>';
+        return;
+      }
+      Object.entries(data).reverse().forEach(([id, item]) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'history-item';
+        itemDiv.innerHTML = `
+          <div class="history-info">
+            <strong>👗 옷:</strong> ${item.clothes}<br>
+            <strong>📍 상황:</strong> ${item.situation}<br>
+            <strong>💬 AI 평가:</strong> ${item.evaluation}<br>
+            <span style="font-size:11px; color:#999;">${item.date}</span>
+          </div>
+          <button class="delete-btn" data-id="${id}">삭제</button>
+        `;
+        
+        itemDiv.querySelector('.delete-btn').addEventListener('click', async (e) => {
+          const itemId = e.target.getAttribute('data-id');
+          if(confirm('이 기록을 데이터베이스에서 삭제할까요?')) {
+            await remove(ref(database, `users/${currentUser.uid}/history/${itemId}`));
+          }
+        });
+        historyList.appendChild(itemDiv);
+      });
+    }
+  </script>
+</body>
+</html>
