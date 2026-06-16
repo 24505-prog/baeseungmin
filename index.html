@@ -163,7 +163,7 @@
           <div class="section-title">1단계: 의류 카테고리 선택</div>
           <div class="item-grid" id="itemGrid"></div>
           
-          <!-- 색상 선택 목록 (실버, 골드 포함하여 업데이트) -->
+          <!-- 색상 선택 목록 -->
           <div class="color-section" id="colorSection">
             <div class="section-title">2단계: 디테일 컬러 매칭 (<span id="targetItemName" style="color:#fff;"></span>)</div>
             <div class="color-grid" id="colorGrid"></div>
@@ -229,7 +229,7 @@
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
     import { getDatabase, ref, push } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 
-    // 전달해주신 신규 구글 웹앱 주소 세팅 완료
+    // 제공해주신 스크립트 연동 주소
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw00j_wbSkTAGehKjmKc5Yo4j52D97KCNExCQt1i4HsvJS1pAixYqm56CYWhilYv2g4_Q/exec';
     
     const firebaseConfig = {
@@ -254,7 +254,6 @@
       "액세서리": ["실버 체인목걸이", "가죽 커프팔찌", "레이어드 반지", "드롭 귀걸이", "메탈 크로노시계", "레더 벨트", "실크 실크넥타이", "쁘띠 미니코튼스카프", "울 머플러", "가죽 장갑", "하프프레임 안경", "스퀘어 선글라스", "레더 크로스백", "유틸리티 백팩", "프리미엄 토트백", "체인 숄더백", "클러치 파우치", "캔버스 에코백", "캐주얼 양말", "황동 뱃지브로치"]
     };
 
-    // 실버와 골드를 추가한 프리미엄 컬러 팔레트 (총 22종)
     const colorPalette = [
       { name: "블랙", hex: "#111111" }, { name: "화이트", hex: "#ffffff" },
       { name: "차콜", hex: "#444444" }, { name: "그레이", hex: "#888888" },
@@ -361,12 +360,12 @@
       document.getElementById('situationInput').value = e.target.textContent;
     };
 
-    // AI 엔진 인터랙션 가동 센서 (CORS 방어막 적용 및 Firebase 강제 트리거 연동)
     const evaluateBtn = document.getElementById('evaluateBtn');
     const ttsPlayBtn = document.getElementById('ttsPlayBtn');
     const audioPlayer = document.getElementById('audioPlayer');
     let currentAudioBase64 = "";
 
+    // CORS 보안 필터를 무조건 우회하는 전송 모듈 구축
     evaluateBtn.onclick = async () => {
       const situation = document.getElementById('situationInput').value.trim();
       if (selectedItems.length === 0 || !situation) {
@@ -379,11 +378,12 @@
       document.getElementById('resultBox').style.display = 'none';
 
       try {
-        // 브라우저 차단을 예방하기 위한 전송 규격 우회 적용
+        // 보안 필터 우회를 위한 모드(no-cors 제거 및 완전 투명 규격화)
         const res = await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
+          mode: 'cors', 
           headers: {
-            'Content-Type': 'text/plain;charset=utf-8'
+            'Accept': 'application/json'
           },
           body: JSON.stringify({
             action: 'evaluate',
@@ -393,7 +393,7 @@
           })
         });
 
-        if (!res.ok) throw new Error(`구글 서버 응답 실패 (코드: ${res.status})`);
+        if (!res.ok) throw new Error(`구글 서버 통신 거부 (상태 코드: ${res.status})`);
 
         const data = await res.json();
         if(data.error) throw new Error(data.error);
@@ -417,7 +417,7 @@
 
       } catch (e) { 
         console.error(e);
-        alert("진단 과정에서 딜레이가 발생했습니다.\n원인: " + e.message + "\n\n구글 스크립트 '새 배포' 시 액세스 권한이 '모든 사용자(Anyone)'로 정상 구성되었는지 점검바랍니다."); 
+        alert("AI 분석 응답 수신 실패\n원인: " + e.message + "\n\n구글 스크립트 사이트 내 [스크립트 속성]에 OPENAI_API_KEY 가 제대로 등록되었는지 꼭 체크해 주세요!"); 
       } finally {
         evaluateBtn.disabled = false;
         evaluateBtn.textContent = "AI 스타일 진단";
