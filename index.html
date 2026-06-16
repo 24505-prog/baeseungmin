@@ -3,223 +3,125 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LUXE AI CLOSET - 프리미엄 패션 컬러 진단</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <title>AI 패션 코디 평가 앱</title>
   <style>
-    :root {
-      --primary-dark: #121212;
-      --card-dark: #1e1e1e;
-      --accent-gold: #d4af37;
-      --accent-gold-gradient: linear-gradient(135deg, #f3e5ab, #d4af37);
-      --text-light: #f5f5f5;
-      --text-muted: #8a8a8a;
-      --border-dark: #2a2a2a;
-    }
-
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    * { box-sizing: border-box; }
     body {
-      margin: 0; font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
-      background: var(--primary-dark); color: var(--text-light); line-height: 1.6;
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #e3f2fd, #fce4ec);
+      font-family: Arial, sans-serif;
+      color: #333;
     }
-
-    .container { width: min(1100px, 95%); margin: 40px auto; padding-bottom: 100px; }
-
-    /* 프리미엄 헤더 디자인 */
-    header { text-align: center; margin-bottom: 40px; }
-    header h1 { font-size: 34px; letter-spacing: 5px; font-weight: 800; margin-bottom: 8px; background: var(--accent-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    header p { color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 3px; }
-
-    /* 인증 & 메인 베이스 카드 */
-    .premium-card {
-      background: var(--card-dark); border-radius: 24px; padding: 35px;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.5); border: 1px solid var(--border-dark);
+    .container {
+      width: min(700px, 92%);
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.16);
+    }
+    h1 { text-align: center; font-size: 26px; margin-bottom: 8px; }
+    .subtitle { text-align: center; color: #777; margin-bottom: 24px; font-size: 14px; }
+    
+    .auth-box { max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    input, select, textarea {
+      width: 100%; height: 46px; padding: 0 14px; border: 1px solid #ddd;
+      border-radius: 12px; font-size: 15px; outline: none; transition: 0.2s;
+    }
+    textarea { min-height: 80px; padding: 12px; resize: vertical; font-family: inherit; }
+    input:focus, select:focus, textarea:focus {
+      border-color: #42a5f5; box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.15);
     }
     
-    .auth-box { max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
-    input, select {
-      height: 52px; border-radius: 12px; border: 1px solid var(--border-dark); padding: 0 20px;
-      font-size: 15px; background: #252525; color: var(--text-light); transition: 0.3s;
+    button {
+      border: none; border-radius: 12px; height: 46px; font-size: 15px;
+      cursor: pointer; transition: 0.15s; font-weight: bold;
     }
-    input:focus, select:focus { border-color: var(--accent-gold); outline: none; }
-
-    /* 레이아웃 구조 */
-    .app-layout { display: grid; grid-template-columns: 1fr 380px; gap: 30px; }
-    @media (max-width: 950px) { .app-layout { grid-template-columns: 1fr; } }
-
-    /* 카테고리 탭 디자인 */
-    .category-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 20px; border-bottom: 1px solid var(--border-dark); }
-    .tab-btn {
-      padding: 12px 22px; background: #252525; border: 1px solid var(--border-dark); border-radius: 50px;
-      white-space: nowrap; cursor: pointer; font-weight: 600; color: var(--text-muted); transition: 0.3s;
-    }
-    .tab-btn.active { background: var(--accent-gold-gradient); color: #121212; border-color: transparent; font-weight: 700; }
-
-    /* 옷 종류 그리드 */
-    .section-title { font-size: 15px; font-weight: bold; color: var(--accent-gold); margin-bottom: 12px; letter-spacing: 1px;}
-    .item-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 25px; }
-    .fashion-item {
-      padding: 14px; background: #252525; border: 1px solid var(--border-dark); border-radius: 14px;
-      text-align: center; cursor: pointer; transition: 0.2s; font-size: 14px; color: #ddd;
-    }
-    .fashion-item:hover { border-color: #555; }
-    .fashion-item.active { border-color: var(--accent-gold); background: rgba(212,175,55,0.05); color: var(--accent-gold); font-weight: bold;}
-
-    /* 색상 팔레트 존 */
-    .color-section { background: #1a1a1a; padding: 20px; border-radius: 16px; border: 1px solid var(--border-dark); display: none; margin-bottom: 25px; animation: fadeIn 0.3s ease; }
-    .color-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); gap: 10px; }
-    .color-btn {
-      display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; 
-      padding: 8px; border-radius: 10px; transition: 0.2s; background: #222; border: 1px solid transparent;
-    }
-    .color-btn:hover { background: #2d2d2d; }
-    .color-circle { width: 24px; height: 24px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); }
-    .color-name { font-size: 11px; color: #bbb; text-align: center; }
-
-    /* 선택된 옷장 (우측 사이드바) */
-    .closet-sidebar { position: sticky; top: 20px; height: fit-content; display: flex; flex-direction: column; gap: 20px; }
-    .closet-title { font-weight: 800; font-size: 18px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border-dark); padding-bottom: 15px;}
-    .selected-list { display: flex; flex-wrap: wrap; gap: 8px; min-height: 80px; align-content: flex-start; }
-    .selected-tag {
-      display: inline-flex; align-items: center; background: #2a2a2a; padding: 8px 14px; border-radius: 10px; 
-      font-size: 13px; border: 1px solid var(--border-dark); color: #eee;
-    }
-    .selected-tag i { margin-left: 10px; cursor: pointer; color: #ff5252; transition: 0.15s; }
-    .selected-tag i:hover { color: #ff1744; }
-
-    /* 상황 태그 리스트 */
-    .situation-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-    .sit-tag {
-      background: #252525; border: 1px solid var(--border-dark); padding: 6px 14px; border-radius: 30px;
-      font-size: 13px; cursor: pointer; color: #aaa; transition: 0.2s;
-    }
-    .sit-tag:hover, .sit-tag.active { border-color: var(--accent-gold); color: var(--accent-gold); background: rgba(212,175,55,0.05); }
-
-    /* 버튼 엔진 */
-    .btn {
-      width: 100%; height: 55px; border-radius: 14px; border: none; font-size: 15px;
-      font-weight: bold; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px;
-    }
-    .btn-gold { background: var(--accent-gold-gradient); color: #121212; font-size: 16px; font-weight: 800; }
-    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(214,175,55,0.2); }
-    .btn-gold:disabled { opacity: 0.5; transform: none; cursor: not-allowed; }
-    .btn-dark { background: #252525; color: var(--text-light); border: 1px solid var(--border-dark); }
-    .btn-dark:hover { background: #2d2d2d; }
+    button:hover { transform: translateY(-2px); opacity: 0.9; }
+    button:disabled { cursor: not-allowed; opacity: 0.6; transform: none; }
     
-    /* 결과 창 */
-    #resultBox { display: none; margin-top: 30px; animation: fadeInUp 0.4s ease; }
-    .result-card { background: #1a1a1a; border: 1px solid var(--accent-gold); padding: 30px; border-radius: 20px; }
-    .result-header { font-size: 18px; font-weight: bold; color: var(--accent-gold); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-    .result-content { font-size: 15px; color: #ddd; line-height: 1.8; white-space: pre-wrap; background: #222; padding: 20px; border-radius: 12px; border: 1px solid #2a2a2a; }
-    
-    /* 음성 재생 레이아웃 */
-    .tts-zone { display: flex; justify-content: center; margin-top: 25px; }
-    .tts-lux-btn {
-      display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer;
-      padding: 15px 30px; border-radius: 50px; background: var(--accent-gold-gradient); color: #121212;
-      font-weight: 800; font-size: 14px; letter-spacing: 1px; transition: 0.3s; box-shadow: 0 10px 25px rgba(214,175,55,0.15);
-    }
-    .tts-lux-btn:hover { transform: scale(1.03); box-shadow: 0 12px 30px rgba(214,175,55,0.3); }
-    .tts-lux-btn i { font-size: 20px; }
+    .primary-btn { background: #42a5f5; color: white; }
+    .secondary-btn { background: #7e57c2; color: white; }
+    .logout-btn { background: #455a64; color: white; padding: 0 16px; }
+    .delete-btn { background: #ef5350; color: white; padding: 4px 8px; height: auto; font-size: 12px; border-radius: 6px;}
 
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    .top-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 22px; padding: 14px; border-radius: 16px; background: #f7f9fb;
+    }
+    .main-form { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+    .status { min-height: 20px; color: #666; font-size: 14px; margin-top: 8px; text-align: center; }
+    
+    .result-box { display: none; background: #f1f8e9; border: 1px solid #c5e1a5; padding: 18px; border-radius: 16px; margin-top: 16px; }
+    .result-title { font-weight: bold; color: #33691e; margin-bottom: 8px; }
+    .result-content { line-height: 1.6; white-space: pre-wrap; margin-bottom: 12px; }
+    audio { width: 100%; }
+
+    .history-section { margin-top: 30px; border-top: 1px dashed #ddd; padding-top: 20px; }
+    .history-title { font-size: 18px; font-weight: bold; margin-bottom: 12px; }
+    .history-list { display: flex; flex-direction: column; gap: 10px; }
+    .history-item {
+      background: #f7f9fb; border: 1px solid #edf1f5; padding: 14px; border-radius: 12px;
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .history-info { font-size: 14px; line-height: 1.5; }
     .hidden { display: none; }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <header>
-      <h1>LUXE CLOSET</h1>
-      <p>AI Premium Style & Color Critic</p>
-    </header>
+    <h1>AI 패션 코디 평가기 🧥</h1>
+    <div class="subtitle">내가 고른 옷을 AI가 상황에 맞게 평가하고 음성으로 들려줍니다.</div>
 
-    <!-- 1. 자격 인증 카드 -->
-    <section id="authSection" class="premium-card">
+    <section id="authSection">
       <div class="auth-box">
-        <h3 style="text-align:center; margin-bottom:15px; letter-spacing: 2px;">PREMIUM AUTHENTICATION</h3>
-        <input id="emailInput" type="email" placeholder="이메일 주소 (Email)" />
-        <input id="passwordInput" type="password" placeholder="비밀번호 (Password)" />
-        <button class="btn btn-gold" id="loginBtn">LOG IN</button>
-        <button class="btn btn-dark" id="signupBtn">SIGN UP</button>
+        <input id="emailInput" type="email" placeholder="이메일 주소" />
+        <input id="passwordInput" type="password" placeholder="비밀번호 (6자리 이상)" />
+        <button class="primary-btn" id="loginBtn">로그인</button>
+        <button class="secondary-btn" id="signupBtn">회원가입</button>
       </div>
     </section>
 
-    <!-- 2. 워크스페이스 대시보드 -->
     <section id="mainSection" class="hidden">
-      <div class="app-layout">
-        
-        <!-- 왼쪽 패션 셀렉터 -->
-        <div class="premium-card">
-          <div class="category-tabs" id="categoryTabs">
-            <button class="tab-btn active" data-cat="상의">상의</button>
-            <button class="tab-btn" data-cat="하의">하의</button>
-            <button class="tab-btn" data-cat="아우터">아우터</button>
-            <button class="tab-btn" data-cat="신발">신발</button>
-            <button class="tab-btn" data-cat="모자">모자</button>
-            <button class="tab-btn" data-cat="액세서리">액세서리</button>
-          </div>
-
-          <div class="section-title">1단계: 의류 카테고리 선택</div>
-          <div class="item-grid" id="itemGrid"></div>
-          
-          <!-- 색상 선택 목록 -->
-          <div class="color-section" id="colorSection">
-            <div class="section-title">2단계: 디테일 컬러 매칭 (<span id="targetItemName" style="color:#fff;"></span>)</div>
-            <div class="color-grid" id="colorGrid"></div>
-          </div>
-          
-          <!-- 상황 입력 -->
-          <div style="margin-top: 15px;">
-            <div class="section-title">3단계: 목적지 및 TPO 설정</div>
-            <input id="situationInput" type="text" placeholder="직접 입력하거나 아래 추천 태그를 터치하세요." style="width: 100%;" />
-            <div class="situation-tags" id="sitTags">
-              <span class="sit-tag">첫 소개팅 자리</span>
-              <span class="sit-tag">호텔 하객 명단</span>
-              <span class="sit-tag">대학 캠퍼스 룩</span>
-              <span class="sit-tag">주말 한강 데이트</span>
-              <span class="sit-tag">중요한 대면 면접</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 오른쪽 옷장 사이드바 -->
-        <div class="closet-sidebar premium-card">
-          <div class="closet-title"><i class="fas fa-gem" style="color:var(--accent-gold);"></i> MY VIRTUAL CLOSET</div>
-          
-          <div id="selectedContainer" class="selected-list">
-            <p style="color: var(--text-muted); font-size: 13px;">의류 종류를 누른 뒤 <br>색상을 매칭하면 옷장에 보관됩니다.</p>
-          </div>
-          
-          <div style="margin-top:15px;">
-            <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:6px;">AI 보이스 톤앤매너</label>
-            <select id="voiceSelect" style="width: 100%;">
-              <option value="nova">Nova (차분하고 우아한 스타일리스트)</option>
-              <option value="alloy">Alloy (명쾌하고 정교한 트렌드 세터)</option>
-              <option value="onyx">Onyx (깊고 매력적인 옴므 디자이너)</option>
-              <option value="shimmer">Shimmer (감각적이고 에너제틱한 비평가)</option>
-            </select>
-          </div>
-          
-          <button class="btn btn-gold" id="evaluateBtn"><i class="fas fa-wand-magic-sparkles"></i> AI 스타일 진단</button>
-          <button class="btn btn-dark" id="logoutBtn" style="font-size: 12px; height:42px; margin-top:15px; color:var(--text-muted);">로그아웃</button>
-        </div>
+      <div class="top-bar">
+        <div style="font-size: 14px;">님 환영합니다! ✨ <br><strong id="userEmail"></strong></div>
+        <button class="logout-btn" id="logoutBtn">로그아웃</button>
       </div>
 
-      <!-- 결과 아웃풋 카드 -->
-      <div id="resultBox">
-        <div class="result-card">
-          <div class="result-header"><i class="fas fa-quote-left"></i> LUXE AI STYLE REPORT</div>
-          <div id="resultContent" class="result-content"></div>
-          
-          <div class="tts-zone">
-            <div id="ttsPlayBtn" class="tts-lux-btn">
-              <i class="fas fa-volume-high"></i>
-              <span>평가 음성 듣기 (PLAY TTS)</span>
-            </div>
-          </div>
-          <audio id="audioPlayer" class="hidden"></audio>
+      <div class="main-form">
+        <div>
+          <label style="font-weight:bold; display:block; margin-bottom:6px;">오늘 입은 (또는 고른) 옷</label>
+          <input id="clothesInput" type="text" placeholder="예: 검은색 오버핏 후드티, 와이드 청바지, 흰색 운동화" />
         </div>
+        <div>
+          <label style="font-weight:bold; display:block; margin-bottom:6px;">가려는 상황 / 장소</label>
+          <input id="situationInput" type="text" placeholder="예: 대학 대면 강의실, 첫 소개팅, 격식 있는 결혼식 하객" />
+        </div>
+        <div>
+          <label style="font-weight:bold; display:block; margin-bottom:6px;">AI 목소리 선택</label>
+          <select id="voiceSelect">
+            <option value="nova">Nova (부드러운 여성음)</option>
+            <option value="alloy">Alloy (중성적이고 깔끔함)</option>
+            <option value="onyx">Onyx (차분하고 멋진 남성음)</option>
+            <option value="shimmer">Shimmer (화사한 여성음)</option>
+          </select>
+        </div>
+        <button class="primary-btn" id="evaluateBtn">스타일 평가받기 (TTS 재생)</button>
+      </div>
+
+      <div id="status" class="status"></div>
+
+      <div id="resultBox" class="result-box">
+        <div class="result-title">💡 스타일리스트 AI의 패션 평가</div>
+        <div id="resultContent" class="result-content"></div>
+        <audio id="audioPlayer" controls autoplay></audio>
+      </div>
+
+      <div class="history-section">
+        <div class="history-title">📜 나의 이전 코디 기록</div>
+        <div id="historyList" class="history-list"></div>
       </div>
     </section>
   </div>
@@ -227,238 +129,211 @@
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-    import { getDatabase, ref, push } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+    import { getDatabase, ref, push, set, remove, onValue, off } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 
-    // 제공해주신 스크립트 연동 주소
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw00j_wbSkTAGehKjmKc5Yo4j52D97KCNExCQt1i4HsvJS1pAixYqm56CYWhilYv2g4_Q/exec';
-    
+    // [중요] 본인의 구글 앱스 스크립트 웹 앱 URL을 아래에 꼭 붙여넣으세요!
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxA9oYRq88ODTNIiH8MmzIl0oGoiI16ksKDL4th-LrcIz21S5wamHN6TzvH8iodwL4IWw/exec';
+
+    // 제출해주신 Firebase 구성 정보 적용 완료
     const firebaseConfig = {
       apiKey: "AIzaSyBVeHOtbK6HgclpIx3a3GwfFfoBnAUJn_g",
       authDomain: "baeseung-ccd19.firebaseapp.com",
       databaseURL: "https://baeseung-ccd19-default-rtdb.firebaseio.com",
       projectId: "baeseung-ccd19",
       storageBucket: "baeseung-ccd19.firebasestorage.app",
-      appId: "1:660051676205:web:8ca691620cb44c5d6fbca4"
+      messagingSenderId: "660051676205",
+      appId: "1:660051676205:web:8ca691620cb44c5d6fbca4",
+      measurementId: "G-FQZBVH3400"
     };
 
+    // Firebase 초기화
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const database = getDatabase(app);
 
-    const fashionData = {
-      "상의": ["반팔 티셔츠", "긴팔 티셔츠", "셔츠", "블라우스", "니트 세터", "맨투맨", "후드티", "카라티", "민소매 슬리브리스", "터틀넥", "스트라이프티", "체크 셔츠", "오버핏 티셔츠", "옥스포드 셔츠", "린넨 셔츠", "V넥 크루", "니트 조끼", "크롭탑", "카디건", "실크 나시"],
-      "하의": ["청바지", "드레스 슬랙스", "치노 면바지", "버뮤다 반바지", "조거 팬츠", "와이드 데님", "카고 팬츠", "린넨 바지", "롱 스커트", "미니 스커트", "테이퍼드 진", "부츠컷 팬츠", "H라인 스커트", "트레이닝 바지", "가죽 바지", "생지 흑청", "코듀로이 바지", "플리츠 스커트", "밴딩 팬츠", "정장 바지"],
-      "아우터": ["롱 코트", "헤비 패딩", "테일러드 자켓", "트위드 자켓", "가죽 라이더 자켓", "청자켓", "항공 점퍼", "트렌치 코트", "윈드브레이커", "후드 집업", "무스탕", "블레이저", "필드 야상", "플리스 점퍼", "더플 떡볶이코트", "숏 패딩", "블루종 자켓", "경량 패딩 조끼", "바시티 자켓", "가디건 아우터"],
-      "신발": ["미니멀 스니커즈", "러닝 캔버스화", "더비 슈즈", "클래식 로퍼", "가죽 워커", "스트랩 샌들", "슬리퍼", "첼시 가죽부츠", "어글리 슈즈", "옥스퍼드 구두", "스틸레토 힐", "플랫 플랫슈즈", "레인 부츠", "슬립온", "독일군 스니커즈", "블로퍼", "웨스턴 부츠", "스웨이드 로퍼", "스포츠 운동화", "뮬"],
-      "모자": ["미니멀 볼캡", "스트릿 비니", "코튼 버킷햇", "클래식 페도라", "프렌치 베레모", "뉴스보이 헌팅캡", "스냅백", "보트 가든햇", "캠프캡", "니트 버킷햇", "와치캡", "썬캡 바이저", "밀짚 보터햇", "귀도리 방한모", "탈착식 사파리햇", "헬멧 이너캡", "트러커캡", "파일럿햇", "바라클라바", "보울러"],
-      "액세서리": ["실버 체인목걸이", "가죽 커프팔찌", "레이어드 반지", "드롭 귀걸이", "메탈 크로노시계", "레더 벨트", "실크 실크넥타이", "쁘띠 미니코튼스카프", "울 머플러", "가죽 장갑", "하프프레임 안경", "스퀘어 선글라스", "레더 크로스백", "유틸리티 백팩", "프리미엄 토트백", "체인 숄더백", "클러치 파우치", "캔버스 에코백", "캐주얼 양말", "황동 뱃지브로치"]
-    };
-
-    const colorPalette = [
-      { name: "블랙", hex: "#111111" }, { name: "화이트", hex: "#ffffff" },
-      { name: "차콜", hex: "#444444" }, { name: "그레이", hex: "#888888" },
-      { name: "실버", hex: "#cccccc" }, { name: "골드", hex: "#e5c158" },
-      { name: "네이비", hex: "#0f1e36" }, { name: "블루", hex: "#2196f3" },
-      { name: "스카이블루", hex: "#a7d7f9" }, { name: "베이지", hex: "#f5f5dc" },
-      { name: "아이보리", hex: "#fffff0" }, { name: "브라운", hex: "#5d4037" },
-      { name: "카키", hex: "#4b5320" }, { name: "올리브", hex: "#808000" },
-      { name: "와인", hex: "#722f37" }, { name: "레드", hex: "#f44336" },
-      { name: "핑크", hex: "#ffc0cb" }, { name: "오렌지", hex: "#ff9800" },
-      { name: "옐로우", hex: "#ffeb3b" }, { name: "그린", hex: "#4caf50" },
-      { name: "퍼플", hex: "#9c27b0" }, { name: "카멜", hex: "#c19a6b" }
-    ];
-
-    let selectedItems = [];
-    let currentPendingItem = "";
-
-    function renderItems(category) {
-      const grid = document.getElementById('itemGrid');
-      grid.innerHTML = '';
-      fashionData[category].forEach(item => {
-        const div = document.createElement('div');
-        div.className = `fashion-item ${currentPendingItem === item ? 'active' : ''}`;
-        div.textContent = item;
-        div.onclick = () => selectItemStep1(item);
-        grid.appendChild(div);
-      });
-    }
-
-    function selectItemStep1(item) {
-      currentPendingItem = item;
-      document.getElementById('targetItemName').textContent = item;
-      document.getElementById('colorSection').style.display = 'block';
-      
-      const activeCat = document.querySelector('.tab-btn.active').dataset.cat;
-      renderItems(activeCat);
-      renderColors();
-    }
-
-    function renderColors() {
-      const colorGrid = document.getElementById('colorGrid');
-      colorGrid.innerHTML = '';
-      colorPalette.forEach(color => {
-        const div = document.createElement('div');
-        div.className = 'color-btn';
-        div.innerHTML = `
-          <div class="color-circle" style="background-color: ${color.hex}"></div>
-          <div class="color-name">${color.name}</div>
-        `;
-        div.onclick = () => selectColorStep2(color.name);
-        colorGrid.appendChild(div);
-      });
-    }
-
-    function selectColorStep2(colorName) {
-      if(!currentPendingItem) return;
-      const combinedItem = `[${colorName}] ${currentPendingItem}`;
-      
-      if(selectedItems.includes(combinedItem)) {
-        alert("이미 같은 컬러의 아이템이 옷장에 있습니다.");
-        return;
-      }
-      if(selectedItems.length >= 8) {
-        alert("한 번에 최대 8개 아이템까지만 진단 가능합니다.");
-        return;
-      }
-
-      selectedItems.push(combinedItem);
-      updateClosetUI();
-      
-      currentPendingItem = "";
-      document.getElementById('colorSection').style.display = 'none';
-      const activeCat = document.querySelector('.tab-btn.active').dataset.cat;
-      renderItems(activeCat);
-    }
-
-    function updateClosetUI() {
-      const container = document.getElementById('selectedContainer');
-      if (selectedItems.length === 0) {
-        container.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">의류 종류를 누른 뒤 <br>색상을 매칭하면 옷장에 보관됩니다.</p>';
-        return;
-      }
-      container.innerHTML = selectedItems.map(item => `
-        <span class="selected-tag">${item} <i class="fas fa-times" onclick="removeTag('${item}')"></i></span>
-      `).join('');
-    }
-
-    window.removeTag = (item) => {
-      selectedItems = selectedItems.filter(i => i !== item);
-      updateClosetUI();
-    };
-
-    document.getElementById('categoryTabs').onclick = (e) => {
-      if (!e.target.classList.contains('tab-btn')) return;
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
-      renderItems(e.target.dataset.cat);
-    };
-
-    document.getElementById('sitTags').onclick = (e) => {
-      if(!e.target.classList.contains('sit-tag')) return;
-      document.querySelectorAll('.sit-tag').forEach(t => t.classList.remove('active'));
-      e.target.classList.add('active');
-      document.getElementById('situationInput').value = e.target.textContent;
-    };
-
+    // DOM 요소
+    const authSection = document.getElementById('authSection');
+    const mainSection = document.getElementById('mainSection');
+    const emailInput = document.getElementById('emailInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const loginBtn = document.getElementById('loginBtn');
+    const signupBtn = document.getElementById('signupBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userEmail = document.getElementById('userEmail');
+    
+    const clothesInput = document.getElementById('clothesInput');
+    const situationInput = document.getElementById('situationInput');
+    const voiceSelect = document.getElementById('voiceSelect');
     const evaluateBtn = document.getElementById('evaluateBtn');
-    const ttsPlayBtn = document.getElementById('ttsPlayBtn');
+    const statusBox = document.getElementById('status');
+    const resultBox = document.getElementById('resultBox');
+    const resultContent = document.getElementById('resultContent');
     const audioPlayer = document.getElementById('audioPlayer');
-    let currentAudioBase64 = "";
+    const historyList = document.getElementById('historyList');
 
-    // CORS 보안 필터를 무조건 우회하는 전송 모듈 구축
-    evaluateBtn.onclick = async () => {
-      const situation = document.getElementById('situationInput').value.trim();
-      if (selectedItems.length === 0 || !situation) {
-        alert("스타일링할 의류 색상 세트와 상황(TPO)을 명확히 입력하세요!");
-        return;
-      }
+    let currentUser = null;
+    let dbRef = null;
 
-      evaluateBtn.disabled = true;
-      evaluateBtn.textContent = "AI 럭셔리 스타일링 리포트 빌드 중...";
-      document.getElementById('resultBox').style.display = 'none';
-
+    // 회원가입
+    signupBtn.addEventListener('click', async () => {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+      if(!email || !password) return alert('이메일과 비밀번호를 입력해주세요.');
       try {
-        // 보안 필터 우회를 위한 모드(no-cors 제거 및 완전 투명 규격화)
-        const res = await fetch(APPS_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'cors', 
-          headers: {
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            action: 'evaluate',
-            clothes: selectedItems.join(", "),
-            situation: situation,
-            voice: document.getElementById('voiceSelect').value
-          })
-        });
+        await createUserWithEmailAndPassword(auth, email, password);
+        alert('회원가입이 완료되었습니다!');
+      } catch (e) { alert('회원가입 실패: ' + e.message); }
+    });
 
-        if (!res.ok) throw new Error(`구글 서버 통신 거부 (상태 코드: ${res.status})`);
+    // 로그인
+    loginBtn.addEventListener('click', async () => {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+      if(!email || !password) return alert('이메일과 비밀번호를 입력해주세요.');
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (e) { alert('로그인 실패: ' + e.message); }
+    });
 
-        const data = await res.json();
-        if(data.error) throw new Error(data.error);
-        
-        document.getElementById('resultContent').innerText = data.evaluation;
-        currentAudioBase64 = data.audioBase64;
-        document.getElementById('resultBox').style.display = 'block';
-        
-        window.scrollTo({ top: document.getElementById('resultBox').offsetTop - 20, behavior: 'smooth' });
+    // 로그아웃
+    logoutBtn.addEventListener('click', () => signOut(auth));
 
-        // 파이어베이스 데이터 백업 실행
-        if (auth.currentUser) {
-          const uid = auth.currentUser.uid;
-          await push(ref(database, `users/${uid}/history`), {
-            clothes: selectedItems.join(", "),
-            situation: situation,
-            evaluation: data.evaluation,
-            date: new Date().toLocaleString()
-          });
-        }
-
-      } catch (e) { 
-        console.error(e);
-        alert("AI 분석 응답 수신 실패\n원인: " + e.message + "\n\n구글 스크립트 사이트 내 [스크립트 속성]에 OPENAI_API_KEY 가 제대로 등록되었는지 꼭 체크해 주세요!"); 
-      } finally {
-        evaluateBtn.disabled = false;
-        evaluateBtn.textContent = "AI 스타일 진단";
-      }
-    };
-
-    ttsPlayBtn.onclick = () => {
-      if (!currentAudioBase64) {
-        alert("재생할 음성 데이터가 없습니다.");
-        return;
-      }
-      audioPlayer.src = `data:audio/mp3;base64,${currentAudioBase64}`;
-      audioPlayer.play().catch(e => alert("오디오 재생 실패"));
-    };
-
+    // 인증 상태 감지
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        document.getElementById('authSection').classList.add('hidden');
-        document.getElementById('mainSection').classList.remove('hidden');
-        renderItems("상의");
+        currentUser = user;
+        authSection.classList.add('hidden');
+        mainSection.classList.remove('hidden');
+        userEmail.textContent = user.email;
+        emailInput.value = ''; passwordInput.value = '';
+        startDataSync(user.uid);
       } else {
-        document.getElementById('authSection').classList.remove('hidden');
-        document.getElementById('mainSection').classList.add('hidden');
+        currentUser = null;
+        authSection.classList.remove('hidden');
+        mainSection.classList.add('hidden');
+        if(dbRef) off(dbRef);
+        historyList.innerHTML = '';
+        resultBox.style.display = 'none';
       }
     });
 
-    document.getElementById('loginBtn').onclick = () => {
-      const email = document.getElementById('emailInput').value.trim();
-      const pass = document.getElementById('passwordInput').value.trim();
-      if(!email || !pass) return alert('정보를 입력하세요.');
-      signInWithEmailAndPassword(auth, email, pass).catch(e => alert("로그인 실패: " + e.message));
-    };
-    
-    document.getElementById('signupBtn').onclick = () => {
-      const email = document.getElementById('emailInput').value.trim();
-      const pass = document.getElementById('passwordInput').value.trim();
-      if(!email || !pass) return alert('정보를 입력하세요.');
-      createUserWithEmailAndPassword(auth, email, pass).then(() => alert("회원가입 완료!")).catch(e => alert("가입 실패: " + e.message));
-    };
-    
-    document.getElementById('logoutBtn').onclick = () => signOut(auth);
+    // AI 평가 및 TTS 요청
+    evaluateBtn.addEventListener('click', async () => {
+      const clothes = clothesInput.value.trim();
+      const situation = situationInput.value.trim();
+      const voice = voiceSelect.value;
+
+      if(!clothes || !situation) {
+        alert('옷과 상황 정보를 모두 입력해 주세요!');
+        return;
+      }
+
+      try {
+        evaluateBtn.disabled = true;
+        evaluateBtn.textContent = 'AI 스타일리스트가 분석 중...';
+        statusBox.textContent = '구글 서버를 경유해 AI 피드백을 받아오고 있습니다.';
+        resultBox.style.display = 'none';
+
+        const response = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({
+            action: 'evaluate',
+            clothes: clothes,
+            situation: situation,
+            voice: voice
+          })
+        });
+
+        const data = await response.json();
+        if(data.error) throw new Error(data.error);
+
+        resultContent.textContent = data.evaluation;
+        
+        const audioUrl = base64ToAudioUrl(data.audioBase64, 'audio/mpeg');
+        audioPlayer.src = audioUrl;
+        resultBox.style.display = 'block';
+        statusBox.textContent = '분석이 완료되어 오디오가 재생됩니다!';
+
+        saveToFirebase(clothes, situation, data.evaluation);
+
+        clothesInput.value = '';
+        situationInput.value = '';
+
+      } catch (err) {
+        console.error(err);
+        statusBox.textContent = '평가 요청 실패';
+        alert('에러 발생: ' + err.message);
+      } finally {
+        evaluateBtn.disabled = false;
+        evaluateBtn.textContent = '스타일 평가받기 (TTS 재생)';
+      }
+    });
+
+    function base64ToAudioUrl(base64, mimeType) {
+      const byteCharacters = atob(base64);
+      const byteArrays = [];
+      for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+        const slice = byteCharacters.slice(offset, offset + 512);
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+        byteArrays.push(new Uint8Array(byteNumbers));
+      }
+      const blob = new Blob(byteArrays, { type: mimeType });
+      return URL.createObjectURL(blob);
+    }
+
+    async function saveToFirebase(clothes, situation, evaluation) {
+      if(!currentUser) return;
+      try {
+        const userItemsRef = ref(database, `users/${currentUser.uid}/history`);
+        const newItemRef = push(userItemsRef);
+        await set(newItemRef, {
+          clothes,
+          situation,
+          evaluation,
+          date: new Date().toLocaleString('ko-KR')
+        });
+      } catch(e) { console.error('Firebase 저장 실패:', e); }
+    }
+
+    function startDataSync(uid) {
+      dbRef = ref(database, `users/${uid}/history`);
+      onValue(dbRef, (snapshot) => {
+        const data = snapshot.val();
+        renderHistory(data);
+      });
+    }
+
+    function renderHistory(data) {
+      historyList.innerHTML = '';
+      if(!data) {
+        historyList.innerHTML = '<div style="color:#888; text-align:center; padding:10px;">저장된 스타일 평가 기록이 없습니다.</div>';
+        return;
+      }
+      Object.entries(data).reverse().forEach(([id, item]) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'history-item';
+        itemDiv.innerHTML = `
+          <div class="history-info">
+            <strong>👗 옷:</strong> ${item.clothes}<br>
+            <strong>📍 상황:</strong> ${item.situation}<br>
+            <strong>💬 AI 평가:</strong> ${item.evaluation}<br>
+            <span style="font-size:11px; color:#999;">${item.date}</span>
+          </div>
+          <button class="delete-btn" data-id="${id}">삭제</button>
+        `;
+        
+        itemDiv.querySelector('.delete-btn').addEventListener('click', async (e) => {
+          const itemId = e.target.getAttribute('data-id');
+          if(confirm('이 기록을 데이터베이스에서 삭제할까요?')) {
+            await remove(ref(database, `users/${currentUser.uid}/history/${itemId}`));
+          }
+        });
+        historyList.appendChild(itemDiv);
+      });
+    }
   </script>
 </body>
 </html>
