@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MUSINSA LOOK - AI 패션 코디 평가 앱</title>
+  <title>SEUNGSINSA LOOK - AI 패션 코디 평가 앱</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
     :root {
-      --musinsa-black: #111111;
-      --musinsa-dark-gray: #222222;
-      --musinsa-light-gray: #f4f4f4;
-      --musinsa-accent: #0078ff;
+      --seungsinsa-black: #111111;
+      --seungsinsa-dark-gray: #222222;
+      --seungsinsa-light-gray: #f4f4f4;
+      --seungsinsa-accent: #0078ff;
       --border-color: #dddddd;
       --text-main: #333333;
     }
@@ -18,12 +18,12 @@
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body {
       margin: 0; font-family: 'Pretendard', Arial, sans-serif;
-      background: var(--musinsa-light-gray); color: var(--text-main); line-height: 1.6;
+      background: var(--seungsinsa-light-gray); color: var(--text-main); line-height: 1.6;
     }
     .container { width: min(1100px, 95%); margin: 40px auto; padding-bottom: 80px; }
 
-    /* 무신사 스타일 헤더 */
-    header { text-align: center; margin-bottom: 35px; border-bottom: 3px solid var(--musinsa-black); padding-bottom: 15px; }
+    /* 승신사 스타일 헤더 */
+    header { text-align: center; margin-bottom: 35px; border-bottom: 3px solid var(--seungsinsa-black); padding-bottom: 15px; }
     header h1 { font-size: 28px; font-weight: 900; letter-spacing: -1px; margin: 0 0 5px 0; text-transform: uppercase; }
     header .subtitle { color: #666; font-size: 14px; }
 
@@ -35,30 +35,30 @@
       height: 48px; border-radius: 0px; border: 1px solid var(--border-color); padding: 0 14px;
       font-size: 14px; background: #fff; transition: 0.2s;
     }
-    input:focus, select:focus { border-color: var(--musinsa-black); outline: none; }
+    input:focus, select:focus { border-color: var(--seungsinsa-black); outline: none; }
 
     /* 메인 스튜디오 구조 */
     .studio-layout { display: grid; grid-template-columns: 1fr 380px; gap: 25px; }
     @media (max-width: 900px) { .studio-layout { grid-template-columns: 1fr; } }
 
-    /* 무신사 카테고리 탭 */
+    /* 승신사 카테고리 탭 */
     .category-container { margin-bottom: 20px; }
     .category-tabs { display: flex; gap: 5px; overflow-x: auto; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
     .tab-btn {
       padding: 10px 18px; background: #fff; border: 1px solid var(--border-color); font-weight: 700;
       font-size: 13px; cursor: pointer; white-space: nowrap; transition: 0.2s;
     }
-    .tab-btn.active { background: var(--musinsa-black); color: #fff; border-color: var(--musinsa-black); }
+    .tab-btn.active { background: var(--seungsinsa-black); color: #fff; border-color: var(--seungsinsa-black); }
 
     /* 아이템 셀렉터 그리드 */
-    .section-title { font-size: 14px; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; border-left: 3px solid var(--musinsa-black); padding-left: 8px; }
+    .section-title { font-size: 14px; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; border-left: 3px solid var(--seungsinsa-black); padding-left: 8px; }
     .item-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; margin-bottom: 25px; }
     .fashion-item {
       padding: 12px; background: #fafafa; border: 1px solid var(--border-color); font-size: 13px;
       text-align: center; cursor: pointer; font-weight: 500; transition: 0.15s;
     }
     .fashion-item:hover { background: #eee; }
-    .fashion-item.active { border-color: var(--musinsa-black); background: #f0f0f0; font-weight: 700; }
+    .fashion-item.active { border-color: var(--seungsinsa-black); background: #f0f0f0; font-weight: 700; }
 
     /* 컬러 그리드 파트 */
     .color-section { background: #fafafa; padding: 20px; border: 1px solid var(--border-color); display: none; margin-bottom: 25px; }
@@ -71,10 +71,10 @@
 
     /* 가상 옷장 사이드바 */
     .closet-sidebar { display: flex; flex-direction: column; gap: 20px; height: fit-content; position: sticky; top: 20px; }
-    .top-bar { display: flex; justify-content: space-between; align-items: center; background: var(--musinsa-light-gray); padding: 12px; font-size: 13px; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; background: var(--seungsinsa-light-gray); padding: 12px; font-size: 13px; }
     .selected-list { display: flex; flex-wrap: wrap; gap: 6px; min-height: 60px; align-content: flex-start; }
     .selected-tag {
-      display: inline-flex; align-items: center; background: var(--musinsa-black); color: #fff;
+      display: inline-flex; align-items: center; background: var(--seungsinsa-black); color: #fff;
       padding: 6px 12px; font-size: 12px; font-weight: 600;
     }
     .selected-tag i { margin-left: 8px; cursor: pointer; color: #ff5252; }
@@ -84,18 +84,18 @@
     .sit-tag {
       background: #fff; border: 1px solid var(--border-color); padding: 5px 12px; font-size: 12px; cursor: pointer; transition: 0.15s;
     }
-    .sit-tag:hover, .sit-tag.active { border-color: var(--musinsa-black); background: var(--musinsa-black); color: #fff; }
+    .sit-tag:hover, .sit-tag.active { border-color: var(--seungsinsa-black); background: var(--seungsinsa-black); color: #fff; }
 
     /* 버튼 계열 */
     button { border-radius: 0px; font-family: inherit; }
-    .btn-black { width: 100%; height: 50px; background: var(--musinsa-black); color: #fff; font-size: 15px; font-weight: 800; cursor: pointer; border: none; }
+    .btn-black { width: 100%; height: 50px; background: var(--seungsinsa-black); color: #fff; font-size: 15px; font-weight: 800; cursor: pointer; border: none; }
     .btn-black:hover { background: #333; }
     .btn-black:disabled { background: #999; cursor: not-allowed; }
     .btn-outline { background: #fff; color: #555; border: 1px solid var(--border-color); padding: 5px 10px; font-size: 12px; cursor: pointer; }
     .delete-btn { background: #ff5252; color: #fff; border: none; padding: 4px 8px; font-size: 11px; cursor: pointer; }
 
     /* 결과 모듈 */
-    .result-box { display: none; background: #fff; border: 2px solid var(--musinsa-black); padding: 25px; margin-top: 25px; }
+    .result-box { display: none; background: #fff; border: 2px solid var(--seungsinsa-black); padding: 25px; margin-top: 25px; }
     .result-title { font-size: 16px; font-weight: 900; margin-bottom: 12px; text-transform: uppercase; letter-spacing: -0.5px; }
     .result-content { font-size: 14px; color: #222; line-height: 1.7; white-space: pre-wrap; margin-bottom: 15px; background: #f9f9f9; padding: 15px; border: 1px solid #eee; }
     audio { width: 100%; }
@@ -105,7 +105,7 @@
     .history-item { background: #fff; border: 1px solid var(--border-color); padding: 18px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-start; }
     .history-info { font-size: 13px; color: #444; }
 
-    .status { font-size: 13px; color: var(--musinsa-accent); text-align: center; font-weight: bold; margin-top: 10px; }
+    .status { font-size: 13px; color: var(--seungsinsa-accent); text-align: center; font-weight: bold; margin-top: 10px; }
     .hidden { display: none; }
   </style>
 </head>
@@ -113,7 +113,7 @@
 
   <div class="container">
     <header>
-      <h1>MUSINSA LOOK ENGINE</h1>
+      <h1>SEUNGSINSA LOOK ENGINE</h1>
       <div class="subtitle">선택된 가상 옷장의 코디 벨런스를 매칭하여 AI 리포트 및 음성 피드백을 출력합니다.</div>
     </header>
 
@@ -148,9 +148,9 @@
           <div class="section-title">의류 카테고리 아이템 선택</div>
           <div class="item-grid" id="itemGrid"></div>
           
-          <!-- 실버, 골드를 포함한 무신사 연동 컬러 필터 -->
+          <!-- 실버, 골드 포함 총 15개 테마 컬러 매트릭스 -->
           <div class="color-section" id="colorSection">
-            <div class="section-title">디테일 컬러 매칭 (<span id="targetItemName" style="color:var(--musinsa-accent);"></span>)</div>
+            <div class="section-title">디테일 컬러 매칭 (<span id="targetItemName" style="color:var(--seungsinsa-accent);"></span>)</div>
             <div class="color-grid" id="colorGrid"></div>
           </div>
           
@@ -216,7 +216,6 @@
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
     import { getDatabase, ref, push, remove, onValue, off } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 
-    // 기존에 제공해주신 주소 그대로 유지 연동 완료
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyWAeevqRDsS91-klK2ao-k6S7R0SB4jEwHBGPSEukOQq3kCPtc5bmYkFaQ9uDtMaQr/exec';
 
     const firebaseConfig = {
@@ -234,21 +233,26 @@
     const auth = getAuth(app);
     const database = getDatabase(app);
 
+    // 하의에 버뮤다 팬츠 추가 및 액세서리에 긴양말, 짧은양말 라인업 편입 완료
     const fashionData = {
       "상의": ["반팔 티셔츠", "긴팔 티셔츠", "셔츠", "블라우스", "니트 스웨터", "맨투맨", "후드티", "카라티", "가디건"],
-      "하의": ["청바지", "슬랙스", "면바지", "반바지", "조거 팬츠", "와이드 데님", "카고 팬츠", "스커트"],
+      "하의": ["버뮤다 팬츠", "청바지", "슬랙스", "면바지", "반바지", "조거 팬츠", "와이드 데님", "카고 팬츠", "스커트"],
       "아우터": ["롱 코트", "패딩 점퍼", "트위드 자켓", "가죽 자켓", "블레이저", "트렌치 코트", "윈드브레이커"],
       "신발": ["스니커즈", "캔버스화", "더비 슈즈", "로퍼", "워커 부츠", "샌들", "힐 구두"],
       "모자": ["볼캡 모자", "비니", "버킷햇", "페도라", "베레모"],
-      "액세서리": ["체인 목걸이", "가죽 팔찌", "반지 세트", "메탈 시계", "가죽 벨트", "숄더 백", "백팩"]
+      "액세서리": ["긴양말", "짧은양말", "체인 목걸이", "가죽 팔찌", "반지 세트", "메탈 시계", "가죽 벨트", "숄더 백", "백팩"]
     };
 
+    // 트렌디 신규 컬러 4종(크림, 올리브, 차콜, 라이트블루) 추가 반영
     const colorPalette = [
       { name: "블랙", hex: "#111111" }, { name: "화이트", hex: "#ffffff" },
-      { name: "그레이", hex: "#888888" }, { name: "네이비", hex: "#0f1e36" },
+      { name: "크림", hex: "#fdfbd3" }, { name: "그레이", hex: "#888888" },
+      { name: "차콜", hex: "#3a3a3a" }, { name: "네이비", hex: "#0f1e36" },
       { name: "베이지", hex: "#f5f5dc" }, { name: "브라운", hex: "#5d4037" },
-      { name: "카키", hex: "#4b5320" }, { name: "와인", hex: "#722f37" },
-      { name: "블루", hex: "#2196f3" }, { name: "실버", hex: "#cccccc" }, { name: "골드", hex: "#e5c158" }
+      { name: "카키", hex: "#4b5320" }, { name: "올리브", hex: "#606e57" },
+      { name: "와인", hex: "#722f37" }, { name: "블루", hex: "#2196f3" },
+      { name: "라이트블루", hex: "#add8e6" }, { name: "실버", hex: "#cccccc" }, 
+      { name: "골드", hex: "#e5c158" }
     ];
 
     let selectedItems = [];
@@ -330,7 +334,6 @@
       document.getElementById('situationInput').value = e.target.textContent;
     };
 
-    // Firebase 가동부 복구 연동
     document.getElementById('signupBtn').onclick = async () => {
       const email = document.getElementById('emailInput').value.trim();
       const pass = document.getElementById('passwordInput').value.trim();
@@ -363,7 +366,6 @@
       }
     });
 
-    // 가상 옷장 기반의 데이터 전송 제어 허브
     document.getElementById('evaluateBtn').onclick = async () => {
       const situation = document.getElementById('situationInput').value.trim();
       if(selectedItems.length === 0 || !situation) return alert("옷장의 의류 세트와 TPO 상황 설정을 모두 마쳐주세요!");
@@ -374,7 +376,7 @@
 
       try {
         evaluateBtn.disabled = true;
-        evaluateBtn.textContent = '무신사 AI 코디 리포트 추출 중...';
+        evaluateBtn.textContent = '승신사 AI 코디 리포트 추출 중...';
         statusBox.textContent = '연동된 구글 서버 엔진을 통해 가상 패션 피드백을 수신하고 있습니다.';
         resultBox.style.display = 'none';
 
@@ -396,7 +398,6 @@
         resultBox.style.display = 'block';
         statusBox.textContent = '분석 리포트 갱신 및 음성 가이드를 재생합니다.';
 
-        // 데이터 백업 컴파일링
         if(currentUser) {
           const { ref: fRef, push: fPush, set: fSet } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js');
           await fSet(fPush(ref(database, `users/${currentUser.uid}/history`)), {
@@ -409,7 +410,7 @@
       } catch (err) {
         console.error(err);
         statusBox.textContent = '평가 거부 처리됨';
-        alert('에러 알림: ' + err.message + "\n구글 앱스 스크립트가 '새 배포' 상태 및 OpenAI API Key 자격을 갖고 있는지 체크하세요.");
+        alert('에러 알림: ' + err.message);
       } finally {
         evaluateBtn.disabled = false;
         evaluateBtn.textContent = '스타일 평가받기 (TTS 재생)';
